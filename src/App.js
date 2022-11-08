@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme, GlobalStyles } from "./themes";
+import Header from "./components/Header";
+import Create from "./components/Create";
+import Todos from "./components/Todos/Todos";
+import Bottom from "./components/Bottom/Bottom";
 
 function App() {
+  const [theme, setTheme] = useState("light");
+  const [input, setInput] = useState("");
+  const [filterValue, setFilterValue] = useState("All");
+
+  const [todosArray, setTodosArray] = useState([]);
+
+  const themeToggler = () => {
+    theme === "light" ? setTheme("dark") : setTheme("light");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <GlobalStyles />
+      <Header theme={theme} setTheme={setTheme} themeToggler={themeToggler} />
+      <Create
+        todosArray={todosArray}
+        setTodosArray={setTodosArray}
+        input={input}
+        setInput={setInput}
+      />
+      <Todos
+        todosArray={todosArray}
+        setTodosArray={setTodosArray}
+        filterValue={filterValue}
+      />
+      <Bottom
+        todosArray={todosArray}
+        setTodosArray={setTodosArray}
+        filterValue={filterValue}
+        setFilterValue={setFilterValue}
+      />
+    </ThemeProvider>
   );
 }
 
